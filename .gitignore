@@ -1,0 +1,8 @@
+.idea
+node_modules
+npm-*
+test/**/*.js
+test/**/*.d.ts
+config.*
+yarn*
+.node*
