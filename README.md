@@ -1,3 +1,3 @@
-# Vineyard Gnome
+# Vineyard Garden Gnome
 
 Blockchain validation
