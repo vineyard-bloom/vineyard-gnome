@@ -10,14 +10,20 @@ const same: any[] = [];
 export function compare(first: any, second: any, path: string[], secondName: string): AddressResponse {
  let messages: string[] = []
  for (let i in first) {
+  console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;', first)
   const secondValue = second ? second[i] : undefined
   if (secondValue === undefined) {
    onlyFirst.push({ path: `first.${i}`, value: first[i] })
    const pathString = path.concat(i).join('.')
-   messages.push(secondName + ' is missing ' + pathString)
+   // messages.push(secondName + ' is missing ' + pathString)
   }
 
+  console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;', secondValue, first[i])
   if (secondValue && secondValue !== first[i]) {
+   if (first[i] && typeof first[i] === 'object') {
+    compare(first[i], secondValue, path.concat(i), secondName)
+    // messages = messages.concat(compare(firstValue, secondValue, path.concat(i), secondName))
+   }
    differences.push({ first: { path: `first.${i}`, value: first[i] }, second: { path: `second.${i}`, value: second[i] }})
   }
 
@@ -27,7 +33,8 @@ export function compare(first: any, second: any, path: string[], secondName: str
 
   const firstValue = first[i]
   if (firstValue && typeof firstValue === 'object') {
-   messages = messages.concat(compare(firstValue, secondValue, path.concat(i), secondName))
+   compare(firstValue, secondValue, path.concat(i), secondName)
+   // messages = messages.concat(compare(firstValue, secondValue, path.concat(i), secondName))
   }
  }
 
@@ -36,12 +43,13 @@ export function compare(first: any, second: any, path: string[], secondName: str
   if (firstValue === undefined) {
    onlySecond.push({ path: `second.${i}`, value: second[i] })
    const pathString = path.concat(i).join('.')
-   messages.push(secondName + ' is missing ' + pathString)
+   // messages.push(secondName + ' is missing ' + pathString)
   }
 
   const secondValue = second[i]
   if (secondValue && typeof secondValue === 'object') {
-   messages = messages.concat(compare(firstValue, secondValue, path.concat(i), secondName))
+   compare(firstValue, secondValue, path.concat(i), secondName)
+   // messages = messages.concat(compare()
   }
  }
 
@@ -51,4 +59,30 @@ export function compare(first: any, second: any, path: string[], secondName: str
   onlyFirst: onlyFirst,
   onlySecond: onlySecond,
  }
+}
+
+
+
+function flatten(data) {
+ var result = {};
+ function recurse(cur, prop) {
+  if (Object(cur) !== cur) {
+   result[prop] = cur;
+  } else if (Array.isArray(cur)) {
+   for (var i = 0, l = cur.length; i < l; i++)
+    recurse(cur[i], prop + "[" + i + "]");
+   if (l == 0)
+    result[prop] = [];
+  } else {
+   var isEmpty = true;
+   for (var p in cur) {
+    isEmpty = false;
+    recurse(cur[p], prop ? prop + "." + p : p);
+   }
+   if (isEmpty && prop)
+    result[prop] = {};
+  }
+ }
+ recurse(data, "");
+ return result;
 }
