@@ -1,8 +1,9 @@
 require('source-map-support').install()
 import { compare, deepEqual, checkValues } from "../../src/diffy"
+const assert = require('assert');
+
 const obj = require('./testData')
 const obj2 = require('./testData2')
-
 const second = 1000
 const minute = 60 * second
 
