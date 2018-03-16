@@ -7,33 +7,35 @@ const onlySecond: any[] = [];
 const differences: any[] = [];
 const same: any[] = [];
 
-export function checkValues(obj1, obj2): AddressResponse {
- for (var p in obj1) {
-   if (obj2 == undefined || obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) {
-    onlyFirst.push({ path: `obj1.${p}`, value: obj1[p] })
-    break;
-  }
-
-  switch (typeof (obj1[p])) {
-   case 'object':
-      checkValues(obj1[p], obj2[p])
-    break;
-
-   default:
-    if (obj1[p] != obj2[p]) {
-     differences.push({ first: { path: `obj1.${p}`, value: obj1[p] }, second: { path: `obj2.${p}`, value: obj2[p] } })
+export function checkValues(obj1, obj2, rootName): AddressResponse {
+  for (var key in obj1) {
+    if (typeof obj1[key] === 'object') {
+      checkValues(obj1[key], obj2[key], rootName)
+      break;
     }
-    if (obj1[p] == obj2[p]) {
-     same.push({ first: { path: `obj1.${p}`, value: obj1[p] }, second: { path: `obj2.${p}`, value: obj2[p] } })
-    }
-  }
- }
 
- for (var p in obj2) {
-  if (typeof (obj1[p]) == 'undefined') {
-   onlySecond.push({ path: `obj2.${p}`, value: obj2[p] })
+    // const diffs = getDifferentValues(obj1[key], obj2[key], key, rootName, [rootName]);
+    const firstVal = getOnlyFirstValues(obj1, obj2, key, rootName, [rootName])
+    
+    if (!firstVal) break;
+    getSameValues(obj1[key], obj2[key], key, rootName, [rootName]);
+    // if ('object' && obj2 == undefined || obj1.hasOwnProperty(key) !== obj2.hasOwnProperty(key)) {
+    //   onlyFirst.push({ path: `${rootName}.${key}`, value: obj1[key] })
+    //   break;
+    // }
+
+    // if (obj1[key] != obj2[key]) {
+    //   differences.push({ first: { path: `${rootName}.${key}`, value: obj1[key] }, second: { path: `${rootName}.${key}`, value: obj2[key] } })
+    // }
+    // if (obj1[key] == obj2[key]) {
+    //   same.push({ first: { path: `${rootName}.${key}`, value: obj1[key] }, second: { path: `${rootName}.${key}`, value: obj2[key] } })
+    // }
   }
- }
+
+  for (var key in obj2) {
+    getOnlySecondValues(obj1, obj2, key, rootName, [rootName])
+  }
+
  return {
   differences: differences,
   same: same,
@@ -41,3 +43,35 @@ export function checkValues(obj1, obj2): AddressResponse {
   onlySecond: onlySecond,
  }
 };
+
+export function getOnlyFirstValues(obj1, obj2, key, rootName, path) {
+  // if (obj2 && obj1) getDifferentValues(obj1, obj2, key, rootName, path);
+  
+  if ('object' && obj2 == undefined || obj1.hasOwnProperty(key) !== obj2.hasOwnProperty(key)) {
+    onlyFirst.push({ path: `${rootName}.${key}`, value: obj1[key] })
+    return false;
+  }
+  else {
+    return true
+  }
+}
+
+export function getOnlySecondValues(obj1, obj2, key, rootName, path) {
+  if (typeof (obj1[key]) == 'undefined') {
+    onlySecond.push({ path: `${rootName}.${key}`, value: obj2[key] })
+  }
+}
+
+export function getDifferentValues(obj1, obj2, key, rootName, path) {
+  if(!obj1 || !obj2) return false;
+
+  if (obj1 != obj2) {
+    differences.push({ first: { path: `${rootName}.${key}`, value: obj1[key] }, second: { path: `${rootName}.${key}`, value: obj2[key] } })
+  }
+}
+
+export function getSameValues(obj1, obj2, key, rootName, path) {
+  if (obj1[key] == obj2[key]) {
+    same.push({ first: { path: `${rootName}.${key}`, value: obj1[key] }, second: { path: `${rootName}.${key}`, value: obj2[key] } })
+  }
+}

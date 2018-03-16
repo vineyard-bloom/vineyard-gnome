@@ -1,5 +1,5 @@
 require('source-map-support').install()
-import { compare, deepEqual, checkValues } from "../../src/diffy"
+import { paths, checkValues } from "../../src/diffy"
 const assert = require('assert');
 
 const obj = require('./testData')
@@ -15,7 +15,7 @@ describe('eth-scan', function () {
  })
 
  it('compares two address histories with one difference', async function () {
-  const addressInfo = await checkValues(obj, obj2);
+  const addressInfo = await checkValues(obj, obj2, 'coyoteUgly');
   console.log('got address info', addressInfo);
  })
 
