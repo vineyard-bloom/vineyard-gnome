@@ -1,5 +1,5 @@
 require('source-map-support').install()
-import { paths, checkValues } from "../../src/diffy"
+import { checkValues } from "../../src/diffy"
 const assert = require('assert');
 
 const obj = require('./testData')
