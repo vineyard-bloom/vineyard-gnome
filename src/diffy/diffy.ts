@@ -3,12 +3,16 @@ import { AddressHistory, EthereumTransaction, TokenTransferRecord, Address, Addr
 import { log } from 'util';
 const assert = require('assert');
 
-const onlyFirst: any[] = [];
-const onlySecond: any[] = [];
-const differences: any[] = [];
-const same: any[] = [];
+let onlyFirst: any[] = [];
+let onlySecond: any[] = [];
+let differences: any[] = [];
+let same: any[] = [];
 
 export function checkValues(obj1, obj2, originalObject1, originalObject2, rootname): AddressResponse {
+  // let unique = [...new Set(same.map(item => item.Group))];
+  // console.log(unique);
+  // console.log(unique);
+
   for (var key in obj1) {
     if (typeof obj1[key] === 'object') {
       checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname);
@@ -20,8 +24,12 @@ export function checkValues(obj1, obj2, originalObject1, originalObject2, rootna
       }
 
       if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
-        if (obj1[key] !== obj2[key]) getDifferentValues(obj1, obj2, originalObject1, originalObject2, key);
-        if (obj1[key] == obj2[key]) getSameValues(obj1, obj2, originalObject1, originalObject2, key);
+        if (obj1[key] !== obj2[key]) {
+          getDifferentValues(obj1, obj2, originalObject1, originalObject2, key);
+        }
+        if (obj1[key] === obj2[key]) {
+          getSameValues(obj1, obj2, originalObject1, originalObject2, key);
+        }
       }
     }
   }
@@ -63,7 +71,7 @@ export function getDifferentValues(obj1, obj2, originalObject1, originalObject2,
 }
 
 export function getSameValues(obj1, obj2, originalObject1, originalObject2, key) {
-  same.push({ first: { path: originalObject1.paths()[obj1[key]], value: obj1[key] }, second: { path: originalObject2.paths()[obj2[key]], value: obj2[key] } })
+  same.concat({ first: { path: originalObject1.paths()[obj1[key]], value: obj1[key] }, second: { path: originalObject2.paths()[obj2[key]], value: obj2[key] } })
 }
 
 Object.prototype.paths = function (root = [], result = {}) {
