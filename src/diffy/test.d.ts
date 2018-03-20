@@ -1,16 +1,14 @@
-declare var myObj: {
-    obj1: {
-        obj2: {
-            data1: number;
-            data2: string;
-            obj3: {
-                data: string;
-            };
-        };
+declare const myObj: {
+    floo: {
+        bar: string;
     };
-    obj4: {
-        description: string;
-        cougars: string;
-        category: string;
-    };
-}, value: string, blahPath: any;
+    status: string;
+    goal: string;
+    result: ({
+        hash: string;
+    } | {
+        hashh: string;
+    })[];
+};
+declare const value = "foo";
+declare const blahPath: any;

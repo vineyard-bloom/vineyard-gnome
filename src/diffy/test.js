@@ -10,21 +10,22 @@ Object.prototype.paths = function (root = [], result = {}) {
         return res;
     }, result);
 };
-var myObj = {
-    obj1: {
-        obj2: {
-            data1: 213,
-            data2: "1231",
-            obj3: {
-                data: "blah"
-            }
-        }
+const myObj = {
+    floo: {
+        bar: "ter"
     },
-    obj4: {
-        description: "toto",
-        cougars: "Jodi",
-        category: "blah"
-    }
-}, value = "blah", blahPath = myObj.paths()[value]; // the value can be set dynamically and if exists it's path will be listed.
+    status: "localhost",
+    goal: "localhost",
+    result: [
+        {
+            hash: "00x3505799c9749cfa7f1c45cd8888d6c001c257a4a34713b46e92bdc576e95b3cf",
+        },
+        {
+            hashh: "foo",
+        },
+    ]
+};
+const value = "foo";
+const blahPath = myObj.paths()[value]; // the value can be set dynamically and if exists it's path will be listed.
 console.log(blahPath);
 //# sourceMappingURL=test.js.map
