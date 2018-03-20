@@ -15,7 +15,7 @@ describe('eth-scan', function () {
  })
 
  it('compares two address histories with one difference', async function () {
-  const addressInfo = await checkValues(obj, obj2, obj, obj2);
+  const addressInfo = await checkValues(obj, obj2, obj, obj2, 'pizzeria');
   console.log('got address info', addressInfo);
  })
 
