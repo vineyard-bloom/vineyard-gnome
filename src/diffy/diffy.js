@@ -8,16 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = require("lodash");
 const assert = require('assert');
 let onlyFirst = [];
 let onlySecond = [];
 let differences = [];
 let same = [];
 function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
-    // let unique = [...new Set(same.map(item => item.Group))];
-    // console.log(unique);
-    // console.log(unique);
     for (var key in obj1) {
         if (typeof obj1[key] === 'object') {
             checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname);
@@ -31,6 +27,8 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
                 if (obj1[key] !== obj2[key]) {
                     getDifferentValues(obj1, obj2, originalObject1, originalObject2, key);
                 }
+                const aval = obj1[key];
+                const aval2 = obj2[key];
                 if (obj1[key] === obj2[key]) {
                     getSameValues(obj1, obj2, originalObject1, originalObject2, key);
                 }
@@ -48,8 +46,6 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
             }
         }
     }
-    const uniqueVal = lodash_1._.uniq(same);
-    const uniqueVal2 = lodash_1._.uniq(differences);
     return {
         differences: differences,
         same: same,
@@ -80,7 +76,8 @@ function getDifferentValues(obj1, obj2, originalObject1, originalObject2, key) {
 }
 exports.getDifferentValues = getDifferentValues;
 function getSameValues(obj1, obj2, originalObject1, originalObject2, key) {
-    same.concat({ first: { path: originalObject1.paths()[obj1[key]], value: obj1[key] }, second: { path: originalObject2.paths()[obj2[key]], value: obj2[key] } });
+    same.push({ first: { path: originalObject1.paths()[obj1[key]], value: obj1[key] }, second: { path: originalObject2.paths()[obj2[key]], value: obj2[key] } });
+    null;
 }
 exports.getSameValues = getSameValues;
 Object.prototype.paths = function (root = [], result = {}) {
@@ -94,4 +91,17 @@ Object.prototype.paths = function (root = [], result = {}) {
         return res;
     }, result);
 };
+function valueDoesntExist(arr, val) {
+    let doesntExist = false;
+    arr.forEach((item, index) => {
+        if (item.first.path.toString() === val.toString()) {
+            doesntExist = false;
+        }
+        else {
+            doesntExist = true;
+        }
+    });
+    return doesntExist;
+}
+exports.valueDoesntExist = valueDoesntExist;
 //# sourceMappingURL=diffy.js.map
