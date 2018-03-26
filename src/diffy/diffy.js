@@ -26,7 +26,7 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
             }
             if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
                 if (obj1[key] !== obj2[key]) {
-                    getDifferentValues(obj1, obj2, originalObject1, originalObject2, key);
+                    getDifferentValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
                 }
                 const aval = obj1[key];
                 const aval2 = obj2[key];
@@ -72,8 +72,10 @@ function getOnlySecondValues(obj1, obj2, originalObject1, originalObject2, key) 
     onlySecond.push({ path: originalObject2.paths()[value], value: obj2[key] });
 }
 exports.getOnlySecondValues = getOnlySecondValues;
-function getDifferentValues(obj1, obj2, originalObject1, originalObject2, key) {
-    differences.push({ first: { path: originalObject1.paths()[obj1[key]], value: obj1[key] }, second: { path: originalObject2.paths()[obj2[key]], value: obj2[key] } });
+function getDifferentValues(obj1, obj2, originalObject1, originalObject2, key, rootname) {
+    let path = originalObject1.paths()[obj1[key]];
+    path[0].unshift(rootname);
+    differences.push({ first: { path: path, value: obj1[key] }, second: { path: originalObject2.paths()[obj2[key]], value: obj2[key] } });
 }
 exports.getDifferentValues = getDifferentValues;
 function getSameValues(obj1, obj2, originalObject1, originalObject2, key) {
