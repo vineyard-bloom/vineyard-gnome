@@ -20,7 +20,6 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
             checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname);
         }
         else {
-            // only first
             if (!obj2 || !obj2[key] && obj1[key]) {
                 getOnlyFirstValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
             }
@@ -41,7 +40,6 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
             checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname);
         }
         else {
-            // onlySecond
             if (!obj1 || !obj1[key] && obj2[key]) {
                 getOnlySecondValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
             }
