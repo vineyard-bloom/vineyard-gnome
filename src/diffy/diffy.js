@@ -90,7 +90,6 @@ function getSameValues(obj1, obj2, originalObject1, originalObject2, key, rootna
     let path2 = originalObject2.paths()[obj2[key]];
     path2[0].unshift(rootname);
     same.push({ first: { path: path1, value: obj1[key] }, second: { path: path2, value: obj2[key] } });
-    null;
 }
 exports.getSameValues = getSameValues;
 Object.prototype.paths = function (root = [], result = {}) {
