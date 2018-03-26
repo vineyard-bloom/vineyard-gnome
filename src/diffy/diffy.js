@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const lodash_1 = require("lodash");
 const assert = require('assert');
 let onlyFirst = [];
 let onlySecond = [];
@@ -47,10 +48,10 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
         }
     }
     return {
-        differences: differences,
-        same: same,
-        onlyFirst: onlyFirst,
-        onlySecond: onlySecond,
+        differences: uniqueFirstAndSecond(differences),
+        same: uniqueFirstAndSecond(same),
+        onlyFirst: unique(onlyFirst),
+        onlySecond: unique(onlySecond),
     };
 }
 exports.checkValues = checkValues;
@@ -91,17 +92,22 @@ Object.prototype.paths = function (root = [], result = {}) {
         return res;
     }, result);
 };
-function valueDoesntExist(arr, val) {
-    let doesntExist = false;
-    arr.forEach((item, index) => {
-        if (item.first.path.toString() === val.toString()) {
-            doesntExist = false;
-        }
-        else {
-            doesntExist = true;
-        }
+function uniqueFirstAndSecond(arr) {
+    var uniques = lodash_1._.map(lodash_1._.groupBy(arr, function (item) {
+        return item.first.value;
+    }), function (grouped) {
+        return grouped[0];
     });
-    return doesntExist;
+    return uniques;
 }
-exports.valueDoesntExist = valueDoesntExist;
+exports.uniqueFirstAndSecond = uniqueFirstAndSecond;
+function unique(arr) {
+    var uniques = lodash_1._.map(lodash_1._.groupBy(arr, function (item) {
+        return item.value;
+    }), function (grouped) {
+        return grouped[0];
+    });
+    return uniques;
+}
+exports.unique = unique;
 //# sourceMappingURL=diffy.js.map

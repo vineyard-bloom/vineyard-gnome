@@ -48,10 +48,10 @@ export function checkValues(obj1, obj2, originalObject1, originalObject2, rootna
   }
 
   return {
-    differences: differences,
-    same: same,
-    onlyFirst: onlyFirst,
-    onlySecond: onlySecond,
+    differences: uniqueFirstAndSecond(differences),
+    same: uniqueFirstAndSecond(same),
+    onlyFirst: unique(onlyFirst),
+    onlySecond: unique(onlySecond),
   }
 };
 
@@ -87,15 +87,20 @@ Object.prototype.paths = function (root = [], result = {}) {
   }, result);
 };
 
-export function valueDoesntExist(arr , val) {
-  let doesntExist = false
-  arr.forEach((item, index) => {
-    if(item.first.path.toString() === val.toString()) {
-      doesntExist = false
-    }
-    else {
-      doesntExist = true
-    }
-  })
-  return doesntExist;
+export function uniqueFirstAndSecond(arr) {
+  var uniques = _.map(_.groupBy(arr, function (item) {
+    return item.first.value;
+  }), function (grouped) {
+    return grouped[0];
+  });
+  return uniques;
+}
+
+export function unique(arr) {
+  var uniques = _.map(_.groupBy(arr, function (item) {
+    return item.value;
+  }), function (grouped) {
+    return grouped[0];
+  });
+  return uniques;
 }
