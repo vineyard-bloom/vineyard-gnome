@@ -21,7 +21,7 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
         }
         else {
             if (!obj2 || !obj2[key] && obj1[key]) {
-                getOnlyFirstValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
+                getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname);
             }
             if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
                 if (obj1[key] !== obj2[key]) {
@@ -41,7 +41,7 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
         }
         else {
             if (!obj1 || !obj1[key] && obj2[key]) {
-                getOnlySecondValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
+                getOnlySecondValues(obj1, obj2, originalObject2, key, rootname);
             }
         }
     }
@@ -54,7 +54,7 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
 }
 exports.checkValues = checkValues;
 ;
-function getOnlyFirstValues(obj1, obj2, originalObject1, originalObject2, key, rootname) {
+function getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname) {
     return __awaiter(this, void 0, void 0, function* () {
         const value = obj1[key];
         if (typeof value === 'function')
@@ -65,7 +65,7 @@ function getOnlyFirstValues(obj1, obj2, originalObject1, originalObject2, key, r
     });
 }
 exports.getOnlyFirstValues = getOnlyFirstValues;
-function getOnlySecondValues(obj1, obj2, originalObject1, originalObject2, key, rootname) {
+function getOnlySecondValues(obj1, obj2, originalObject2, key, rootname) {
     const value = obj2[key];
     if (typeof value === 'function')
         return;

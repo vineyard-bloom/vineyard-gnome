@@ -18,7 +18,7 @@ export function checkValues(obj1, obj2, originalObject1, originalObject2, rootna
     }
     else {
       if (!obj2 || !obj2[key] && obj1[key]) {
-        getOnlyFirstValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
+        getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname);
       }
 
       if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
@@ -40,7 +40,7 @@ export function checkValues(obj1, obj2, originalObject1, originalObject2, rootna
     }
     else {
       if (!obj1 || !obj1[key] && obj2[key]) {
-        getOnlySecondValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
+        getOnlySecondValues(obj1, obj2, originalObject2, key, rootname);
       }
     }
   }
@@ -53,7 +53,7 @@ export function checkValues(obj1, obj2, originalObject1, originalObject2, rootna
   }
 };
 
-export async function getOnlyFirstValues(obj1, obj2, originalObject1, originalObject2, key, rootname) {
+export async function getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname) {
   const value = obj1[key];
   if (typeof value === 'function') return;
   let path1 = originalObject1.paths()[obj1[key]];
@@ -61,7 +61,7 @@ export async function getOnlyFirstValues(obj1, obj2, originalObject1, originalOb
   onlyFirst.push({ path: path1, value: value})
 }
 
-export function getOnlySecondValues(obj1, obj2, originalObject1, originalObject2, key, rootname) {
+export function getOnlySecondValues(obj1, obj2, originalObject2, key, rootname) {
   const value = obj2[key];
   if(typeof value === 'function') return;
   let path2 = originalObject2.paths()[obj2[key]];
