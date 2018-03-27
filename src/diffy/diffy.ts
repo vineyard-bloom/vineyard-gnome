@@ -10,7 +10,7 @@ let onlySecond: any[] = [];
 let differences: any[] = [];
 let same: any[] = [];
 
-export function checkValues(obj1, obj2, originalObject1, originalObject2, rootname): AddressResponse {
+export function checkValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, rootname: string): AddressResponse {
 
   for (var key in obj1) {
     if (typeof obj1[key] === 'object') {
@@ -53,7 +53,7 @@ export function checkValues(obj1, obj2, originalObject1, originalObject2, rootna
   }
 };
 
-export async function getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname) {
+export async function getOnlyFirstValues(obj1: object, obj2: object, originalObject1: object, key: string, rootname: string) {
   const value = obj1[key];
   if (typeof value === 'function') return;
   let path1 = originalObject1.paths()[obj1[key]];
@@ -61,7 +61,7 @@ export async function getOnlyFirstValues(obj1, obj2, originalObject1, key, rootn
   onlyFirst.push({ path: path1, value: value})
 }
 
-export function getOnlySecondValues(obj1, obj2, originalObject2, key, rootname) {
+export function getOnlySecondValues(obj1: object, obj2: object, originalObject2: object, key: string, rootname: string) {
   const value = obj2[key];
   if(typeof value === 'function') return;
   let path2 = originalObject2.paths()[obj2[key]];
@@ -69,7 +69,7 @@ export function getOnlySecondValues(obj1, obj2, originalObject2, key, rootname) 
   onlySecond.push({ path: path2, value: value})
 }
 
-export function getDifferentValues(obj1, obj2, originalObject1, originalObject2, key, rootname) {
+export function getDifferentValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, key: string, rootname: string) {
   let path1 = originalObject1.paths()[obj1[key]];
   path1[0].unshift(rootname)
   let path2 = originalObject2.paths()[obj2[key]];
@@ -77,7 +77,7 @@ export function getDifferentValues(obj1, obj2, originalObject1, originalObject2,
   differences.push({ first: { path: path1, value: obj1[key] }, second: { path: path2, value: obj2[key] } })
 }
 
-export function getSameValues(obj1, obj2, originalObject1, originalObject2, key, rootname) {
+export function getSameValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, key: string, rootname: string) {
   let path1 = originalObject1.paths()[obj1[key]];
   path1[0].unshift(rootname)
   let path2 = originalObject2.paths()[obj2[key]];
@@ -85,7 +85,7 @@ export function getSameValues(obj1, obj2, originalObject1, originalObject2, key,
   same.push({ first: { path: path1, value: obj1[key] }, second: { path: path2, value: obj2[key] } });
 }
 
-Object.prototype.paths = function (root = [], result = {}) {
+Object.prototype.paths = function (root = [], result = {}): string[] {
   var ok = Object.keys(this);
   return ok.reduce((res, key) => {
     var path = root.concat(key);
@@ -97,7 +97,7 @@ Object.prototype.paths = function (root = [], result = {}) {
   }, result);
 };
 
-export function uniqueFirstAndSecond(arr) {
+export function uniqueFirstAndSecond(arr: any[]): any[] {
   var uniques = _.map(_.groupBy(arr, function (item) {
     return item.first.value;
   }), function (grouped) {
@@ -106,7 +106,7 @@ export function uniqueFirstAndSecond(arr) {
   return uniques;
 }
 
-export function unique(arr) {
+export function unique(arr: any[]): any[] {
   var uniques = _.map(_.groupBy(arr, function (item) {
     return item.value;
   }), function (grouped) {
