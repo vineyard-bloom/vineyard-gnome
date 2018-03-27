@@ -16,16 +16,18 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname, onl
             checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyFirst, onlySecond, differences, same);
         }
         else {
-            if (!obj2 || !obj2[key] && obj1[key]) {
-                getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname, onlyFirst);
+            const val1 = obj1[key];
+            const path1 = originalObject1.paths()[obj1[key]];
+            if (!obj2 || !obj2[key] && val1) {
+                getOnlyFirstValues(val1, path1, rootname, onlyFirst);
             }
             if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
-                if (obj1[key] !== obj2[key]) {
+                const val2 = obj2[key];
+                const path2 = originalObject1.paths()[obj2[key]];
+                if (val1 !== val2) {
                     getDifferentValues(obj1, obj2, originalObject1, originalObject2, key, rootname, differences);
                 }
-                const aval = obj1[key];
-                const aval2 = obj2[key];
-                if (obj1[key] === obj2[key]) {
+                if (val1 === val2) {
                     getSameValues(obj1, obj2, originalObject1, originalObject2, key, rootname, same);
                 }
             }
@@ -36,8 +38,10 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname, onl
             checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyFirst, onlySecond, differences, same);
         }
         else {
-            if (!obj1 || !obj1[key] && obj2[key]) {
-                getOnlySecondValues(obj1, obj2, originalObject2, key, rootname, onlySecond);
+            const val2 = obj2[key];
+            const path2 = originalObject2.paths()[obj2[key]];
+            if (!obj1 || !obj1[key] && val2) {
+                getOnlySecondValues(val2, path2, rootname, onlySecond);
             }
         }
     }
@@ -51,24 +55,20 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname, onl
 }
 exports.checkValues = checkValues;
 ;
-function getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname, onlyFirst) {
+function getOnlyFirstValues(value, path, rootname, onlyFirst) {
     return __awaiter(this, void 0, void 0, function* () {
-        const value = obj1[key];
         if (typeof value === 'function')
             return;
-        let path1 = originalObject1.paths()[obj1[key]];
-        path1[0].unshift(rootname);
-        onlyFirst.push({ path: path1, value: value });
+        path[0].unshift(rootname);
+        onlyFirst.push({ path: path, value: value });
     });
 }
 exports.getOnlyFirstValues = getOnlyFirstValues;
-function getOnlySecondValues(obj1, obj2, originalObject2, key, rootname, onlySecond) {
-    const value = obj2[key];
+function getOnlySecondValues(value, path, rootname, onlySecond) {
     if (typeof value === 'function')
         return;
-    let path2 = originalObject2.paths()[obj2[key]];
-    path2[0].unshift(rootname);
-    onlySecond.push({ path: path2, value: value });
+    path[0].unshift(rootname);
+    onlySecond.push({ path: path, value: value });
 }
 exports.getOnlySecondValues = getOnlySecondValues;
 function getDifferentValues(obj1, obj2, originalObject1, originalObject2, key, rootname, differences) {
