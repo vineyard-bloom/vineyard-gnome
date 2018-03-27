@@ -5,30 +5,25 @@ import { _ } from 'lodash';
 
 const assert = require('assert');
 
-let onlyFirst: any[] = [];
-let onlySecond: any[] = [];
-let differences: any[] = [];
-let same: any[] = [];
-
-export function checkValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, rootname: string): AddressResponse {
+export function checkValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, rootname: string, onlyFirst: any[], onlySecond: any[], differences: any[], same: any[]): AddressResponse {
 
   for (var key in obj1) {
     if (typeof obj1[key] === 'object') {
-      checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname);
+      checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyFirst, onlySecond, differences, same);
     }
     else {
       if (!obj2 || !obj2[key] && obj1[key]) {
-        getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname);
+        getOnlyFirstValues(obj1, obj2, originalObject1, key, rootname, onlyFirst);
       }
 
       if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
         if (obj1[key] !== obj2[key]) {
-          getDifferentValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
+          getDifferentValues(obj1, obj2, originalObject1, originalObject2, key, rootname, differences);
         }
         const aval = obj1[key];
         const aval2 = obj2[key];
         if (obj1[key] === obj2[key]) {
-          getSameValues(obj1, obj2, originalObject1, originalObject2, key, rootname);
+          getSameValues(obj1, obj2, originalObject1, originalObject2, key, rootname, same);
         }
       }
     }
@@ -36,24 +31,26 @@ export function checkValues(obj1: object, obj2: object, originalObject1: object,
 
   for (var key in obj2) {
     if (typeof obj2[key] === 'object') {
-      checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname);
+      checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyFirst, onlySecond, differences, same);
     }
     else {
       if (!obj1 || !obj1[key] && obj2[key]) {
-        getOnlySecondValues(obj1, obj2, originalObject2, key, rootname);
+        getOnlySecondValues(obj1, obj2, originalObject2, key, rootname, onlySecond);
       }
     }
   }
 
-  return {
+  const objToReturn = {
     differences: uniqueFirstAndSecond(differences),
     same: uniqueFirstAndSecond(same),
     onlyFirst: unique(onlyFirst),
-    onlySecond: unique(onlySecond),
+    onlySecond: unique(onlySecond), 
   }
+
+  return objToReturn
 };
 
-export async function getOnlyFirstValues(obj1: object, obj2: object, originalObject1: object, key: string, rootname: string) {
+export async function getOnlyFirstValues(obj1: object, obj2: object, originalObject1: object, key: string, rootname: string, onlyFirst: any[]) {
   const value = obj1[key];
   if (typeof value === 'function') return;
   let path1 = originalObject1.paths()[obj1[key]];
@@ -61,7 +58,7 @@ export async function getOnlyFirstValues(obj1: object, obj2: object, originalObj
   onlyFirst.push({ path: path1, value: value})
 }
 
-export function getOnlySecondValues(obj1: object, obj2: object, originalObject2: object, key: string, rootname: string) {
+export function getOnlySecondValues(obj1: object, obj2: object, originalObject2: object, key: string, rootname: string, onlySecond: any[]) {
   const value = obj2[key];
   if(typeof value === 'function') return;
   let path2 = originalObject2.paths()[obj2[key]];
@@ -69,7 +66,7 @@ export function getOnlySecondValues(obj1: object, obj2: object, originalObject2:
   onlySecond.push({ path: path2, value: value})
 }
 
-export function getDifferentValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, key: string, rootname: string) {
+export function getDifferentValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, key: string, rootname: string, differences: any[]) {
   let path1 = originalObject1.paths()[obj1[key]];
   path1[0].unshift(rootname)
   let path2 = originalObject2.paths()[obj2[key]];
@@ -77,7 +74,7 @@ export function getDifferentValues(obj1: object, obj2: object, originalObject1: 
   differences.push({ first: { path: path1, value: obj1[key] }, second: { path: path2, value: obj2[key] } })
 }
 
-export function getSameValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, key: string, rootname: string) {
+export function getSameValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, key: string, rootname: string, same: any[]) {
   let path1 = originalObject1.paths()[obj1[key]];
   path1[0].unshift(rootname)
   let path2 = originalObject2.paths()[obj2[key]];
@@ -85,7 +82,7 @@ export function getSameValues(obj1: object, obj2: object, originalObject1: objec
   same.push({ first: { path: path1, value: obj1[key] }, second: { path: path2, value: obj2[key] } });
 }
 
-Object.prototype.paths = function (root = [], result = {}): string[] {
+Object.prototype.paths = function (root = [], result = {}) {
   var ok = Object.keys(this);
   return ok.reduce((res, key) => {
     var path = root.concat(key);

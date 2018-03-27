@@ -45,12 +45,13 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname) {
             }
         }
     }
-    return {
+    const objToReturn = {
         differences: uniqueFirstAndSecond(differences),
         same: uniqueFirstAndSecond(same),
         onlyFirst: unique(onlyFirst),
         onlySecond: unique(onlySecond),
     };
+    return objToReturn;
 }
 exports.checkValues = checkValues;
 ;
