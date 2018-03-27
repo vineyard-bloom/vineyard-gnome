@@ -12,4 +12,4 @@ module.exports = {
    hashh: "foo",
   }
  ]
-};a
+};
