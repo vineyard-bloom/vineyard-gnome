@@ -46,19 +46,17 @@ export function checkValues(obj1: object, obj2: object, originalObject1: object,
     }
   }
 
-  const objToReturn = {
+  return {
     differences: uniqueFirstAndSecond(differences),
     same: uniqueFirstAndSecond(same),
     onlyFirst: unique(onlyFirst),
-    onlySecond: unique(onlySecond), 
+    onlySecond: unique(onlySecond),
   }
-
-  return objToReturn
 };
 
-export async function getOnlyFirstValues(value: any, path: any[], rootname: string, onlyFirst: any[]) {
-  if (typeof value === 'function') return;
+export async function getOnlyFirstValues(value: any, path: any[], onlyFirst: any[]) {
   path[0].unshift(rootname)
+  if (typeof value === 'function') return;
   onlyFirst.push({ path: path, value: value})
 }
 

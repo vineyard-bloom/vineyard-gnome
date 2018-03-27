@@ -45,21 +45,19 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname, onl
             }
         }
     }
-    const objToReturn = {
+    return {
         differences: uniqueFirstAndSecond(differences),
         same: uniqueFirstAndSecond(same),
         onlyFirst: unique(onlyFirst),
         onlySecond: unique(onlySecond),
     };
-    return objToReturn;
 }
 exports.checkValues = checkValues;
 ;
-function getOnlyFirstValues(value, path, rootname, onlyFirst) {
+function getOnlyFirstValues(value, path, onlyFirst) {
     return __awaiter(this, void 0, void 0, function* () {
         if (typeof value === 'function')
             return;
-        path[0].unshift(rootname);
         onlyFirst.push({ path: path, value: value });
     });
 }
