@@ -15,7 +15,7 @@ export function checkValues(obj1: object, obj2: object, originalObject1: object,
       const val1 = obj1[key];
       const path1 = originalObject1.paths()[obj1[key]];
       
-      if (!obj2 || !obj2[key] && val1) {
+      if (!obj2 || !obj2[key] && obj1[key]) {
         getOnlyFirstValues(val1, path1, rootname, onlyFirst);
       }
       
@@ -54,9 +54,9 @@ export function checkValues(obj1: object, obj2: object, originalObject1: object,
   }
 };
 
-export async function getOnlyFirstValues(value: any, path: any[], onlyFirst: any[]) {
-  path[0].unshift(rootname)
+export async function getOnlyFirstValues(value: any, path: any[], rootname: string, onlyFirst: any[]) {
   if (typeof value === 'function') return;
+  path[0].unshift(rootname)
   onlyFirst.push({ path: path, value: value})
 }
 

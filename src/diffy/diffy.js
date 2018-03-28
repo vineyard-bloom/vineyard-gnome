@@ -18,7 +18,7 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname, onl
         else {
             const val1 = obj1[key];
             const path1 = originalObject1.paths()[obj1[key]];
-            if (!obj2 || !obj2[key] && val1) {
+            if (!obj2 || !obj2[key] && obj1[key]) {
                 getOnlyFirstValues(val1, path1, rootname, onlyFirst);
             }
             if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
@@ -54,10 +54,11 @@ function checkValues(obj1, obj2, originalObject1, originalObject2, rootname, onl
 }
 exports.checkValues = checkValues;
 ;
-function getOnlyFirstValues(value, path, onlyFirst) {
+function getOnlyFirstValues(value, path, rootname, onlyFirst) {
     return __awaiter(this, void 0, void 0, function* () {
         if (typeof value === 'function')
             return;
+        path[0].unshift(rootname);
         onlyFirst.push({ path: path, value: value });
     });
 }
