@@ -33,15 +33,18 @@ function checkValues(obj1, obj2, originalObject1 = obj1, originalObject2 = obj2,
             const val1 = obj1[key];
             const path1 = originalObject1.paths()[val1];
             if (!obj2 || !obj2[key] && val1) {
+                // only first
                 onlyValues(val1, path1, rootname, onlyFirst);
             }
             if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
                 const val2 = obj2[key];
                 const path2 = originalObject2.paths()[val2];
                 if (val1 !== val2) {
+                    // different values
                     bothValues(val1, val2, path1, path2, rootname, differences);
                 }
                 if (val1 === val2) {
+                    // same values
                     bothValues(val1, val2, path1, path2, rootname, same);
                 }
             }
@@ -55,6 +58,7 @@ function checkValues(obj1, obj2, originalObject1 = obj1, originalObject2 = obj2,
             const val2 = obj2[key];
             const path2 = originalObject2.paths()[val2];
             if (!obj1 || !obj1[key] && val2) {
+                // only second
                 onlyValues(val2, path2, rootname, onlySecond);
             }
         }
