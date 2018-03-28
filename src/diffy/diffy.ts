@@ -4,6 +4,7 @@ import { log } from 'util';
 import { _ } from 'lodash';
 
 const assert = require('assert');
+
 /**
  * checkValues
  *
