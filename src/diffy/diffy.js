@@ -60,8 +60,8 @@ function checkValues(obj1, obj2, originalObject1 = obj1, originalObject2 = obj2,
         }
     }
     return {
-        differences: uniqueFirstAndSecond(differences),
-        same: uniqueFirstAndSecond(same),
+        differences: unique(differences, true),
+        same: unique(same, true),
         onlyFirst: unique(onlyFirst),
         onlySecond: unique(onlySecond),
     };
@@ -94,18 +94,9 @@ Object.prototype.paths = function (root = [], result = {}) {
         return res;
     }, result);
 };
-function uniqueFirstAndSecond(arr) {
+function unique(arr, isMultiple = false) {
     var uniques = lodash_1._.map(lodash_1._.groupBy(arr, function (item) {
-        return item.first.value;
-    }), function (grouped) {
-        return grouped[0];
-    });
-    return uniques;
-}
-exports.uniqueFirstAndSecond = uniqueFirstAndSecond;
-function unique(arr) {
-    var uniques = lodash_1._.map(lodash_1._.groupBy(arr, function (item) {
-        return item.value;
+        return isMultiple ? item.first.value : item.value;
     }), function (grouped) {
         return grouped[0];
     });

@@ -61,8 +61,8 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
   }
 
   return {
-    differences: uniqueFirstAndSecond(differences),
-    same: uniqueFirstAndSecond(same),
+    differences: unique(differences, true),
+    same: unique(same, true),
     onlyFirst: unique(onlyFirst),
     onlySecond: unique(onlySecond),
   }
@@ -92,18 +92,9 @@ Object.prototype.paths = function (root = [], result = {}) {
   }, result);
 };
 
-export function uniqueFirstAndSecond(arr: any[]): any[] {
+export function unique(arr: any[], isMultiple = false): any[] {
   var uniques = _.map(_.groupBy(arr, function (item) {
-    return item.first.value;
-  }), function (grouped) {
-    return grouped[0];
-  });
-  return uniques;
-}
-
-export function unique(arr: any[]): any[] {
-  var uniques = _.map(_.groupBy(arr, function (item) {
-    return item.value;
+    return isMultiple ? item.first.value : item.value;
   }), function (grouped) {
     return grouped[0];
   });

@@ -16,5 +16,4 @@ import { AddressResponse } from "../types";
 export declare function checkValues(obj1: object, obj2: object, originalObject1?: object, originalObject2?: object, rootname?: string, onlyFirst?: never[], onlySecond?: never[], differences?: never[], same?: never[]): AddressResponse;
 export declare function onlyValues(value: any, path: any[], rootname: string, arr: any[]): Promise<void>;
 export declare function bothValues(val1: any, val2: any, path1: string[], path2: string[], rootname: string, arr: any[]): void;
-export declare function uniqueFirstAndSecond(arr: any[]): any[];
-export declare function unique(arr: any[]): any[];
+export declare function unique(arr: any[], isMultiple?: boolean): any[];
