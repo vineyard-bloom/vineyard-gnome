@@ -18,6 +18,7 @@ const assert = require('assert');
  * @param {same} an OPTIONAL array for the keys that have the same values in both objects
  * @returns AddressResponse which is an object of the previously defined arrays
  */
+
 export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, originalObject2 = obj2 , rootname = 'objectRoot' , onlyFirst = [], onlySecond = [], differences = [], same = []): AddressResponse {
 
   for (var key in obj1) {
@@ -26,7 +27,7 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
     }
     else {
       const val1 = obj1[key];
-      const path1 = originalObject1.paths()[val1]];
+      const path1 = originalObject1.paths()[val1];
       
       if (!obj2 || !obj2[key] && val1) {
         getOnlyFirstValues(val1, path1, rootname, onlyFirst);
