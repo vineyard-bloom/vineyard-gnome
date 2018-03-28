@@ -25,6 +25,7 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
     if (typeof obj1[key] === 'object') {
       checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyFirst, onlySecond, differences, same);
     }
+
     else {
       const val1 = obj1[key];
       const path1 = originalObject1.paths()[val1];
@@ -33,18 +34,21 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
         // only first
         onlyValues(val1, path1, rootname, onlyFirst);
       }
-      
+
       if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
         const val2 = obj2[key];
         const path2 = originalObject2.paths()[val2];
+
         if (val1 !== val2) {
           // different values
           bothValues(val1, val2, path1, path2, rootname, differences);
         }
+
         if (val1 === val2) {
           // same values
           bothValues(val1, val2, path1, path2, rootname, same);
         }
+
       }
     }
   }
@@ -53,6 +57,7 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
     if (typeof obj2[key] === 'object') {
       checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyFirst, onlySecond, differences, same);
     }
+
     else {
       const val2 = obj2[key];
       const path2 = originalObject2.paths()[val2];
@@ -61,6 +66,7 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
         // only second
         onlyValues(val2, path2, rootname, onlySecond);
       }
+      
     }
   }
 
