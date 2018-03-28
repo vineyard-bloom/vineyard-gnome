@@ -22,3 +22,7 @@ export interface AddressResponse {
  onlyFirst: any[],
  onlySecond: any[],
 }
+
+export interface Differences {
+ 
+}

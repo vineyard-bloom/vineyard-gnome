@@ -33,16 +33,16 @@ function checkValues(obj1, obj2, originalObject1 = obj1, originalObject2 = obj2,
             const val1 = obj1[key];
             const path1 = originalObject1.paths()[val1];
             if (!obj2 || !obj2[key] && val1) {
-                getOnlyFirstValues(val1, path1, rootname, onlyFirst);
+                onlyValues(val1, path1, rootname, onlyFirst);
             }
             if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
                 const val2 = obj2[key];
                 const path2 = originalObject2.paths()[val2];
                 if (val1 !== val2) {
-                    getDifferentValues(val1, val2, path1, path2, rootname, differences);
+                    bothValues(val1, val2, path1, path2, rootname, differences);
                 }
                 if (val1 === val2) {
-                    getSameValues(val1, val2, path1, path2, rootname, same);
+                    bothValues(val1, val2, path1, path2, rootname, same);
                 }
             }
         }
@@ -55,7 +55,7 @@ function checkValues(obj1, obj2, originalObject1 = obj1, originalObject2 = obj2,
             const val2 = obj2[key];
             const path2 = originalObject2.paths()[val2];
             if (!obj1 || !obj1[key] && val2) {
-                getOnlySecondValues(val2, path2, rootname, onlySecond);
+                onlyValues(val2, path2, rootname, onlySecond);
             }
         }
     }
@@ -68,34 +68,21 @@ function checkValues(obj1, obj2, originalObject1 = obj1, originalObject2 = obj2,
 }
 exports.checkValues = checkValues;
 ;
-function getOnlyFirstValues(value, path, rootname, onlyFirst) {
+function onlyValues(value, path, rootname, arr) {
     return __awaiter(this, void 0, void 0, function* () {
         if (typeof value === 'function')
             return;
         path[0].unshift(rootname);
-        onlyFirst.push({ path: path, value: value });
+        arr.push({ path: path, value: value });
     });
 }
-exports.getOnlyFirstValues = getOnlyFirstValues;
-function getOnlySecondValues(value, path, rootname, onlySecond) {
-    if (typeof value === 'function')
-        return;
-    path[0].unshift(rootname);
-    onlySecond.push({ path: path, value: value });
-}
-exports.getOnlySecondValues = getOnlySecondValues;
-function getDifferentValues(val1, val2, path1, path2, rootname, differences) {
+exports.onlyValues = onlyValues;
+function bothValues(val1, val2, path1, path2, rootname, arr) {
     path1[0].unshift(rootname);
     path2[0].unshift(rootname);
-    differences.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } });
+    arr.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } });
 }
-exports.getDifferentValues = getDifferentValues;
-function getSameValues(val1, val2, path1, path2, rootname, same) {
-    path1[0].unshift(rootname);
-    path2[0].unshift(rootname);
-    same.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } });
-}
-exports.getSameValues = getSameValues;
+exports.bothValues = bothValues;
 Object.prototype.paths = function (root = [], result = {}) {
     var ok = Object.keys(this);
     return ok.reduce((res, key) => {

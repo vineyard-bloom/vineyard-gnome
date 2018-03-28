@@ -30,17 +30,17 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
       const path1 = originalObject1.paths()[val1];
       
       if (!obj2 || !obj2[key] && val1) {
-        getOnlyFirstValues(val1, path1, rootname, onlyFirst);
+        onlyValues(val1, path1, rootname, onlyFirst);
       }
       
       if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
         const val2 = obj2[key];
         const path2 = originalObject2.paths()[val2];
         if (val1 !== val2) {
-          getDifferentValues(val1, val2, path1, path2, rootname, differences);
+          bothValues(val1, val2, path1, path2, rootname, differences);
         }
         if (val1 === val2) {
-          getSameValues(val1, val2, path1, path2, rootname, same);
+          bothValues(val1, val2, path1, path2, rootname, same);
         }
       }
     }
@@ -55,7 +55,7 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
       const path2 = originalObject2.paths()[val2];
       
       if (!obj1 || !obj1[key] && val2) {
-        getOnlySecondValues(val2, path2, rootname, onlySecond);
+        onlyValues(val2, path2, rootname, onlySecond);
       }
     }
   }
@@ -68,28 +68,16 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
   }
 };
 
-export async function getOnlyFirstValues(value: any, path: any[], rootname: string, onlyFirst: any[]) {
+export async function onlyValues(value: any, path: any[], rootname: string, arr: any[]) {
   if (typeof value === 'function') return;
   path[0].unshift(rootname)
-  onlyFirst.push({ path: path, value: value})
+  arr.push({ path: path, value: value})
 }
 
-export function getOnlySecondValues(value: any, path: any[], rootname: string, onlySecond: any[]) {
-  if(typeof value === 'function') return;
-  path[0].unshift(rootname)
-  onlySecond.push({ path: path, value: value})
-}
-
-export function getDifferentValues(val1:any, val2:any, path1:string[], path2:string[], rootname: string, differences: any[]) {
+export function bothValues(val1: any, val2: any, path1: string[], path2: string[], rootname: string, arr: any[]) {
   path1[0].unshift(rootname)
   path2[0].unshift(rootname)
-  differences.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } })
-}
-
-export function getSameValues(val1: any, val2: any, path1: string[], path2: string[], rootname: string, same: any[]) {
-  path1[0].unshift(rootname)
-  path2[0].unshift(rootname)
-  same.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } });
+  arr.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } })
 }
 
 Object.prototype.paths = function (root = [], result = {}) {
