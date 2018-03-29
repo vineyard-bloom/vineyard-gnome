@@ -1,5 +1,6 @@
 require('source-map-support').install()
 import { checkValues } from "../../src/diffy"
+import { checkValues2 } from "../../src/diffy"
 const assert = require('assert');
 
 const obj = require('./testData')
@@ -9,14 +10,16 @@ const minute = 60 * second
 
 describe('eth-scan', function () {
  this.timeout(10 * minute)
-
+ 
  beforeEach(async function () {
 
  })
 
  it('compares two address histories with one difference', async function () {
   const addressInfo = await checkValues(obj, obj2);
-  console.log('got address info', addressInfo);
+  console.log('got address info', JSON.stringify(addressInfo, null, 4));
+  // const addressInfo = await checkValues2(obj, obj2);
+  // console.log('got address info', addressInfo);
  })
 
 })

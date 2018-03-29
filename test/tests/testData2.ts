@@ -2,7 +2,7 @@ module.exports = {
  fsoo: {
   baz: 'bar'
  },
- status: "localhost",
+ staasdfasdftus: "localhost",
  goal: "ie",
  result: [
   {
