@@ -13,8 +13,8 @@
  * @returns AddressResponse which is an object of the previously defined arrays
  */
 export declare function checkValues2(obj1: object, obj2: object, originalObject1?: object, originalObject2?: object, rootname?: string, onlyFirst?: never[], onlySecond?: never[], differences?: never[], same?: never[]): any;
-export declare function getOnlyFirstValues(obj1: object, obj2: object): void;
+export declare function getOnlyFirstValues(obj1: object, obj2: object, originalObject1: object, rootname: string, onlyFirstValues?: never[]): never[] | undefined;
 export declare function getOnlySecondValues(obj1: object, obj2: object, originalObject2: object, rootname: string, onlySecondValues?: never[]): never[] | undefined;
-export declare function getDifferentValues(obj1: object, obj2: object): void;
-export declare function getSameValues(obj1: object, obj2: object): void;
+export declare function getDifferentValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, rootname: string, onlyDifferentValues?: never[]): never[];
+export declare function getSameValues(obj1: object, obj2: object, originalObject2: object, originalObject1: object, rootname: string, onlySameValues?: never[]): never[];
 export declare function unique(arr: any[], isMultiple?: boolean): any[];

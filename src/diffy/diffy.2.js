@@ -26,24 +26,38 @@ const assert = require('assert');
  */
 function checkValues2(obj1, obj2, originalObject1 = obj1, originalObject2 = obj2, rootname = 'objectRoot', onlyFirst = [], onlySecond = [], differences = [], same = []) {
     return __awaiter(this, void 0, void 0, function* () {
-        const firstOnlyValues = getOnlyFirstValues(obj1, obj2);
+        const firstOnlyValues = getOnlyFirstValues(obj1, obj2, originalObject1, rootname);
         const secondOnlyValues = yield getOnlySecondValues(obj1, obj2, originalObject2, rootname);
-        const differentValues = getDifferentValues(obj1, obj2);
-        const sameValues = getSameValues(obj1, obj2);
-        // return {
-        //  onlyfirst: firstOnlyValues,
-        //  onylSecond: secondOnlyValues,
-        //  differences: differentValues,
-        //  sameValues: sameValues,
-        // }
+        const differentValues = getDifferentValues(obj1, obj2, originalObject1, originalObject2, rootname);
+        const sameValues = getSameValues(obj1, obj2, originalObject1, originalObject2, rootname);
         return {
             onylSecond: secondOnlyValues,
+            onylFirst: firstOnlyValues,
+            differences: differentValues,
+            sameValues: sameValues,
         };
     });
 }
 exports.checkValues2 = checkValues2;
 ;
-function getOnlyFirstValues(obj1, obj2) {
+function getOnlyFirstValues(obj1, obj2, originalObject1, rootname, onlyFirstValues = []) {
+    for (var key in obj1) {
+        const value = obj1[key];
+        const path = originalObject1.paths()[value];
+        if (typeof obj1[key] === 'object') {
+            getOnlyFirstValues(obj1[key], obj2[key], originalObject1, rootname, onlyFirstValues);
+        }
+        else {
+            if (!obj2 || !obj2[key]) {
+                let value = obj1[key];
+                const path2 = originalObject1.paths()[value];
+                if (typeof value === 'function')
+                    return;
+                onlyFirstValues.push({ path: path, value: value });
+            }
+        }
+    }
+    return onlyFirstValues;
 }
 exports.getOnlyFirstValues = getOnlyFirstValues;
 function getOnlySecondValues(obj1, obj2, originalObject2, rootname, onlySecondValues = []) {
@@ -66,10 +80,44 @@ function getOnlySecondValues(obj1, obj2, originalObject2, rootname, onlySecondVa
     return onlySecondValues;
 }
 exports.getOnlySecondValues = getOnlySecondValues;
-function getDifferentValues(obj1, obj2) {
+function getDifferentValues(obj1, obj2, originalObject1, originalObject2, rootname, onlyDifferentValues = []) {
+    for (var key in obj1) {
+        if (typeof obj1[key] === 'object') {
+            getDifferentValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyDifferentValues);
+        }
+        else {
+            if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
+                const val1 = obj1[key];
+                const path1 = originalObject1.paths()[obj1[key]];
+                const val2 = obj2[key];
+                const path2 = originalObject2.paths()[obj2[key]];
+                if (val1 !== val2) {
+                    onlyDifferentValues.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } });
+                }
+            }
+        }
+    }
+    return onlyDifferentValues;
 }
 exports.getDifferentValues = getDifferentValues;
-function getSameValues(obj1, obj2) {
+function getSameValues(obj1, obj2, originalObject2, originalObject1, rootname, onlySameValues = []) {
+    for (var key in obj1) {
+        if (typeof obj1[key] === 'object') {
+            getDifferentValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlySameValues);
+        }
+        else {
+            if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
+                const val1 = obj1[key];
+                const path1 = originalObject1.paths()[obj1[key]];
+                const val2 = obj2[key];
+                const path2 = originalObject2.paths()[obj2[key]];
+                if (val1 === val2) {
+                    onlySameValues.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } });
+                }
+            }
+        }
+    }
+    return onlySameValues;
 }
 exports.getSameValues = getSameValues;
 Object.prototype.paths = function (root = [], result = {}) {
