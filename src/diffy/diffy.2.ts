@@ -50,13 +50,11 @@ export function getOnlySecondValues(obj1: object, obj2: object, originalObject2:
     getOnlySecondValues(obj1[key], obj2[key], originalObject2, rootname, onlySecondValues);
   }
   else {
-   let value = obj2[key];
-   const path2 = originalObject2.paths()[value];
-   if (typeof value === 'function') value = null;
-   if (value !== null && !obj1 || !obj1[key]) {
-    // only second
-    // onlyValues(val2, path2, rootname, onlySecond);
-    onlySecondValues.push({ path: path, value: value })
+    if (!obj1 || !obj1[key]) {
+      let value = obj2[key];
+      const path2 = originalObject2.paths()[value];
+      if (typeof value === 'function') return;
+      onlySecondValues.push({ path: path, value: value })
    }
 
   }
