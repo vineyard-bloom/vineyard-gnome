@@ -22,16 +22,16 @@ const assert = require('assert');
 
 export async function checkValues2(obj1: object, obj2: object, originalObject1 = obj1, originalObject2 = obj2, rootname = 'objectRoot', onlyFirst = [], onlySecond = [], differences = [], same = []): any {
   const firstOnlyValues = getOnlyFirstValues(obj1, obj2, originalObject1, rootname);
- const secondOnlyValues = await getOnlySecondValues(obj1, obj2, originalObject2, rootname);
- const differentValues = getDifferentValues(obj1, obj2, originalObject1, originalObject2, rootname);
- const sameValues = getSameValues(obj1, obj2, originalObject1, originalObject2, rootname);
+  const secondOnlyValues = await getOnlySecondValues(obj1, obj2, originalObject2, rootname);
+  const differentValues = getDifferentValues(obj1, obj2, originalObject1, originalObject2, rootname);
+  const sameValues = getSameValues(obj1, obj2, originalObject1, originalObject2, rootname);
 
- return {
-  onylSecond: secondOnlyValues,
-  onylFirst: firstOnlyValues,
-  differences: differentValues,
-  sameValues: sameValues,
- }
+  return {
+    onylSecond: secondOnlyValues,
+    onylFirst: firstOnlyValues,
+    differences: differentValues,
+    sameValues: sameValues,
+  }
 };
 
 export function getOnlyFirstValues(obj1: object, obj2: object, originalObject1: object, rootname: string, onlyFirstValues = []) {
@@ -57,21 +57,20 @@ export function getOnlyFirstValues(obj1: object, obj2: object, originalObject1: 
 }
 
 export function getOnlySecondValues(obj1: object, obj2: object, originalObject2: object, rootname: string, onlySecondValues = []) {
- for (var key in obj2) {
-  const value = obj2[key];
-  const path = originalObject2.paths()[value];
+  for (var key in obj2) {
+    const value = obj2[key];
+    const path = originalObject2.paths()[value];
 
-  if (typeof obj2[key] === 'object') {
-    getOnlySecondValues(obj1[key], obj2[key], originalObject2, rootname, onlySecondValues);
-  }
-  else {
-    if (!obj1 || !obj1[key]) {
-      let value = obj2[key];
-      const path2 = originalObject2.paths()[value];
-      if (typeof value === 'function') return;
-      onlySecondValues.push({ path: path, value: value })
-   }
-
+    if (typeof obj2[key] === 'object') {
+      getOnlySecondValues(obj1[key], obj2[key], originalObject2, rootname, onlySecondValues);
+    }
+    else {
+      if (!obj1 || !obj1[key]) {
+        let value = obj2[key];
+        const path2 = originalObject2.paths()[value];
+        if (typeof value === 'function') return;
+        onlySecondValues.push({ path: path, value: value })
+    }
   }
  }
 
@@ -80,7 +79,6 @@ export function getOnlySecondValues(obj1: object, obj2: object, originalObject2:
 
 export function getDifferentValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, rootname: string, onlyDifferentValues = []) {
   for (var key in obj1) {
-    
     if (typeof obj1[key] === 'object') {
       getDifferentValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyDifferentValues);
     }
