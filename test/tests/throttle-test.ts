@@ -19,7 +19,7 @@ describe('eth-scan', function () {
   // const addressInfo = await checkValues(obj, obj2);
   // console.log('got address info', JSON.stringify(addressInfo, null, 4));
   const addressInfo = await checkValues2(obj, obj2);
-  console.log('got address info', addressInfo);
+  console.log('got address info', JSON.stringify(addressInfo, null, 4));
  })
 
 })
