@@ -79,6 +79,7 @@ export function getOnlySecondValues(obj1: object, obj2: object, originalObject2:
 
 export function getDifferentValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, rootname: string, onlyDifferentValues = []) {
   for (var key in obj1) {
+    
     if (typeof obj1[key] === 'object') {
       getDifferentValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyDifferentValues);
     }
@@ -133,12 +134,3 @@ Object.prototype.paths = function (root = [], result = {}) {
   return res;
  }, result);
 };
-
-export function unique(arr: any[], isMultiple = false): any[] {
- var uniques = _.map(_.groupBy(arr, function (item) {
-  return isMultiple ? item.first.value : item.value;
- }), function (grouped) {
-  return grouped[0];
- });
- return uniques;
-}
