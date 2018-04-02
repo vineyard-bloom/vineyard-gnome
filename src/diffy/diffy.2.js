@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = require("lodash");
 const assert = require('assert');
 /**
  * checkValues
@@ -131,13 +130,4 @@ Object.prototype.paths = function (root = [], result = {}) {
         return res;
     }, result);
 };
-function unique(arr, isMultiple = false) {
-    var uniques = lodash_1._.map(lodash_1._.groupBy(arr, function (item) {
-        return isMultiple ? item.first.value : item.value;
-    }), function (grouped) {
-        return grouped[0];
-    });
-    return uniques;
-}
-exports.unique = unique;
 //# sourceMappingURL=diffy.2.js.map
