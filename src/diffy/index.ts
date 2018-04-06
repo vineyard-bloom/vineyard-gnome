@@ -1,2 +1,2 @@
 export * from './diffy'
-export * from './diffy.2'
+// export * from './diffy.2'

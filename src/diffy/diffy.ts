@@ -22,6 +22,19 @@ const assert = require('assert');
 
 export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, originalObject2 = obj2 , rootname = 'objectRoot' , onlyFirst = [], onlySecond = [], differences = [], same = []): AddressResponse {
 
+  // passible HACK. had to move in here to get village running
+  Object.prototype.paths = function (root = [], result = {}) {
+    var ok = Object.keys(this);
+    return ok.reduce((res, key) => {
+      var path = root.concat(key);
+      typeof this[key] === "object" &&
+        this[key] !== null ? this[key].paths(path, res)
+        : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
+          : res[this[key]] = [path];
+      return res;
+    }, result);
+  };
+
   for (var key in obj1) {
     if (typeof obj1[key] === 'object') {
       checkValues(obj1[key], obj2[key], originalObject1, originalObject2, rootname, onlyFirst, onlySecond, differences, same);
@@ -86,22 +99,11 @@ export async function onlyValues(value: any, path: any[], rootname: string, arr:
 }
 
 export function bothValues(val1: any, val2: any, path1: string[], path2: string[], rootname: string, arr: any[]) {
+  if (typeof value === 'function') return;
   path1[0].unshift(rootname)
   path2[0].unshift(rootname)
   arr.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } })
 }
-
-Object.prototype.paths = function (root = [], result = {}) {
-  var ok = Object.keys(this);
-  return ok.reduce((res, key) => {
-    var path = root.concat(key);
-    typeof this[key] === "object" &&
-      this[key] !== null ? this[key].paths(path, res)
-      : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
-        : res[this[key]] = [path];
-    return res;
-  }, result);
-};
 
 export function unique(arr: any[], isMultiple = false): any[] {
   var uniques = _.map(_.groupBy(arr, function (item) {
