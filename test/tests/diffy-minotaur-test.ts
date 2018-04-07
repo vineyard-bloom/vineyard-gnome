@@ -29,33 +29,37 @@ describe('ethh-scan', function () {
   await model.LastBlock.create({ currency: 2, blockIndex: 4000000 })
   console.log('Initialized village')
   const monitorData  = await startEthereumMonitor(village, {
-   queue: { maxSize: 5, minSize: 1 },
+   queue: { maxSize: 10, minSize: 5 },
    maxMilliseconds: 1 * minute
   })
-  assert(true)
 
   const addressToCheck = await village.model.Address.first({
    address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280'
   })
 
-  transactionList = await village.model.Transaction.filter({
+  const transactionList = await village.model.Transaction.filter({
    to: addressToCheck.id
   })
 
-  // const minotaurObject = {
-  //  address:'0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
-  //  transactionList: transactionList.slice(20),
-  // }
+  const minotaurObject = {
+   address:'0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
+   transactionList: transactionList.splice(0, 1),
+  }
 
-  // const testObject = {
-  //  address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
-  //  transactionList: testData.slice(20),
-  // }
-  const item1 = transactionList[0]
-  const addressInfo = await checkValues(item1, testData);
-  console.log('got address info', JSON.stringify(item1, null, 2));
-  console.log(':::::::::_:_:__:_:_:_:_:_:__:_:_:');
-  console.log('got address info', JSON.stringify(testData, null, 2));
+  const testObject = {
+   address:'0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
+   transactionList: testData.transactions.splice(0, 1),
+  }
+
+  const addressInfo = await checkValues(testObject, minotaurObject);
+  // const addressInfo = await checkValues(minotaurObject.transactionList, testObject.transactionList);
+
+  // console.log('transaction comparison info', JSON.stringify({
+  //  differences: addressInfo.differences.length,
+  //  same: addressInfo.same.length,
+  //  onlyFirst: addressInfo.onlyFirst.length,
+  //  onlySecond: addressInfo.onlySecond.length,
+  // }, null, 2));
   console.log('got address info');
 
  })

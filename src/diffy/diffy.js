@@ -94,6 +94,11 @@ function onlyValues(value, path, rootname, arr) {
 }
 exports.onlyValues = onlyValues;
 function bothValues(val1, val2, path1, path2, rootname, arr) {
+    if (!path2) {
+        //  getting a bignumner on "fee": from minotaur
+        console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;', arguments);
+        console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;');
+    }
     if (typeof value === 'function')
         return;
     path1[0].unshift(rootname);

@@ -101,6 +101,7 @@ export function getDifferentValues(obj1: object, obj2: object, originalObject1: 
 }
 
 export function getSameValues(obj1: object, obj2: object, originalObject2: object, originalObject1: object, rootname: string, onlySameValues = []) {
+  
   for (var key in obj1) {
 
     if (typeof obj1[key] === 'object') {

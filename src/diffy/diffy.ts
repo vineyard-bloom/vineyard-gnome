@@ -99,6 +99,11 @@ export async function onlyValues(value: any, path: any[], rootname: string, arr:
 }
 
 export function bothValues(val1: any, val2: any, path1: string[], path2: string[], rootname: string, arr: any[]) {
+  if(!path2) {
+    //  getting a bignumner on "fee": from minotaur
+    console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;', arguments)
+    console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;', )
+  }
   if (typeof value === 'function') return;
   path1[0].unshift(rootname)
   path2[0].unshift(rootname)
