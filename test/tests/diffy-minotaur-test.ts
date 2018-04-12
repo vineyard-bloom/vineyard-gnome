@@ -24,7 +24,7 @@ describe('ethh-scan', function () {
   await model.Currency.create({ name: 'Bitcoin' })
  })
  
- it('from 4mil passes check', async function () {
+ xit('from 4mil passes check', async function () {
   // await model.LastBlock.create({ currency: 2 })
   await model.LastBlock.create({ currency: 2, blockIndex: 4000000 })
   console.log('Initialized village')
@@ -63,25 +63,45 @@ describe('ethh-scan', function () {
 
  })
  
- xit('from 4mil fails check', async function () {
-  // await model.LastBlock.create({ currency: 2 })
+ it('from 4mil fails check', async function () {
   await model.LastBlock.create({ currency: 2, blockIndex: 4000000 })
   console.log('Initialized village')
-  const monitorData  = await startEthereumMonitor(village, {
-   queue: { maxSize: 10, minSize: 5 },
+  const monitorData = await startEthereumMonitor(village, {
+   queue: { maxSize: 5, minSize: 1 },
    maxMilliseconds: 1 * minute
   })
-  assert(true)
 
   const addressToCheck = await village.model.Address.first({
    address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280'
   })
 
-  transactionList = await village.model.Transaction.filter({
+  const transactionList = await village.model.Transaction.filter({
    to: addressToCheck.id
   })
-  const addressInfo = await checkValues(transactionList, testData2);
-  console.log('got address info', JSON.stringify(addressInfo, null, 2));
+
+  const minotaurObject = {
+   address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
+   blah: 'this value is only on this object',
+   diff: 'val1',
+   transactionList: transactionList.splice(0, 1),
+  }
+
+  const testObject = {
+   address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
+   bleh: 'this value only shows up o thihis object',
+   diff: 'val1',
+   transactionList: testData.transactions.splice(0, 1),
+  }
+  console.log('::::', JSON.stringify(minotaurObject, null, 2))
+  const obj1String = JSON.stringify(testObject)
+  const normalizedObj1 = JSON.parse(obj1String)
+
+  const obj2String = JSON.stringify(minotaurObject)
+  const normalizedObj2 = JSON.parse(obj2String)
+
+  const addressInfo = await checkValues(normalizedObj1, normalizedObj2);
+
   console.log('got address info');
+
  })
 })

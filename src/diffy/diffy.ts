@@ -52,7 +52,6 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
       if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
         let val2 = obj2[key];
         if (typeof val2 === 'object') {
-          console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;', val2)
           if(typeof val2.getDate === 'function') {
             val2 = val2.toString()
             obj2[key] = val2;
