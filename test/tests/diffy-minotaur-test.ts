@@ -95,4 +95,6 @@ describe('ethh-scan', function () {
   const addressInfo = await checkValues(normalizedObj1, normalizedObj2);
 
   console.log('got address info');
+ })
+
 })
