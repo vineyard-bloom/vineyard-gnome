@@ -49,13 +49,25 @@ function checkValues(obj1, obj2, originalObject1 = obj1, originalObject2 = obj2,
                 onlyValues(val1, path1, rootname, onlyFirst);
             }
             if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
-                const val2 = obj2[key];
+                let val2 = obj2[key];
+                if (typeof val2 === 'object') {
+                    console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;', val2);
+                    if (typeof val2.getDate === 'function') {
+                        val2 = val2.toString();
+                        obj2[key] = val2;
+                    }
+                    else {
+                        val2 = val2.toNumber();
+                        obj2[key] = val2;
+                    }
+                    console.log('maybve');
+                }
                 const path2 = originalObject2.paths()[val2];
-                if (val1 !== val2) {
+                if (val1.toString() !== val2.toString()) {
                     // different values
                     bothValues(val1, val2, path1, path2, rootname, differences);
                 }
-                if (val1 === val2) {
+                if (val1.toString() == val2.toString() && path1 && path2) {
                     // same values
                     bothValues(val1, val2, path1, path2, rootname, same);
                 }
@@ -94,11 +106,6 @@ function onlyValues(value, path, rootname, arr) {
 }
 exports.onlyValues = onlyValues;
 function bothValues(val1, val2, path1, path2, rootname, arr) {
-    if (!path2) {
-        //  getting a bignumner on "fee": from minotaur
-        console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;', arguments);
-        console.log('%c ( ͡° ͜ʖ ͡°)', 'color:tomato;font-size:30px;');
-    }
     if (typeof value === 'function')
         return;
     path1[0].unshift(rootname);

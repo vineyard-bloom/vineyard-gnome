@@ -29,7 +29,7 @@ describe('ethh-scan', function () {
   await model.LastBlock.create({ currency: 2, blockIndex: 4000000 })
   console.log('Initialized village')
   const monitorData  = await startEthereumMonitor(village, {
-   queue: { maxSize: 10, minSize: 5 },
+   queue: { maxSize: 5, minSize: 1 },
    maxMilliseconds: 1 * minute
   })
 
@@ -50,16 +50,15 @@ describe('ethh-scan', function () {
    address:'0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
    transactionList: testData.transactions.splice(0, 1),
   }
+  console.log('::::', JSON.stringify(minotaurObject, null, 2))
+  const obj1String =  JSON.stringify(testObject)
+  const normalizedObj1 = JSON.parse(obj1String)
 
-  const addressInfo = await checkValues(testObject, minotaurObject);
-  // const addressInfo = await checkValues(minotaurObject.transactionList, testObject.transactionList);
+  const obj2String = JSON.stringify(minotaurObject)
+  const normalizedObj2 = JSON.parse(obj2String)
 
-  // console.log('transaction comparison info', JSON.stringify({
-  //  differences: addressInfo.differences.length,
-  //  same: addressInfo.same.length,
-  //  onlyFirst: addressInfo.onlyFirst.length,
-  //  onlySecond: addressInfo.onlySecond.length,
-  // }, null, 2));
+  const addressInfo = await checkValues(normalizedObj1, normalizedObj1);
+
   console.log('got address info');
 
  })
