@@ -1,10 +1,9 @@
 import { blockchain } from 'vineyard-blockchain';
 import { AddressHistory, EthereumTransaction, TokenTransferRecord, Address, AddressResponse } from "../types"
-import { log } from 'util';
-import { _ } from 'lodash';
-
+const Ajv = require('ajv');
 const assert = require('assert');
-
+const ajv = new Ajv();
+const validation = require('./validationSchema.json')
 /**
  * checkValues
  *
@@ -19,5 +18,17 @@ export async function validateAndNormalize(testObject: object, minotaurObject: o
 
  const obj2String = JSON.stringify(minotaurObject)
  const normalizedObj2 = JSON.parse(obj2String)
+ const validate = ajv.compile(validation);
+
+ normalizedObj1.transactionList.forEach( transaction => {
+  var valid1 = validate(transaction);
+  if (!valid1) console.log('_:_::_:__:_:_::_:__:_::_:__:_:_:_:_:_:_:_:',validate.errors);
+ });
+
+ normalizedObj2.transactionList.forEach( transaction => {
+  var valid2 = validate(transaction);
+  if (!valid2) console.log('_:_::_:__:_:_::_:__:_::_:__:_:_:_:_:_:_:_:',validate.errors);
+ });
+ 
  return { normalizedObj1, normalizedObj2 }
 };

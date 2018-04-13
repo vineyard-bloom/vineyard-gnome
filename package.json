@@ -11,6 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "ajv": "^6.4.0",
     "bignumber.js": "^5.0.0",
     "lodash": "^4.17.5",
     "vineyard-blockchain": "vineyard-bloom/vineyard-blockchain#1.0.0-beta",

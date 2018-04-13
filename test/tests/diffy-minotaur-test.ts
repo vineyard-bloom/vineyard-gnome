@@ -43,11 +43,11 @@ describe('ethh-scan', function () {
 
   const minotaurObject = {
    address:addressToTest,
-   transactionList: transactionList.splice(0, 10),
+   transactionList: transactionList.splice(0, 5),
   }
   const testObject = {
    address:addressToTest,
-   transactionList: testData.transactions
+   transactionList: testData.transactions.splice(0, 5),
   }
 
   const objs = await validateAndNormalize(testObject, minotaurObject)
