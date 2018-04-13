@@ -1,0 +1,56 @@
+{
+ "transaction": {
+    "properties": {
+      "id": {
+       "type": "number"
+      },
+     "status": {
+      "type": "number"
+     },
+     "txid": {
+      "type": "string"
+     },
+     "currency": {
+      "type": "number"
+     },
+     "to": {
+      "type": "string"
+     },
+     "from": {
+      "type": "string"
+     },
+     "fee": {
+      "type": "string"
+     },
+     "nonce": {
+      "type": "number"
+     },
+     "timeReceived": {
+      "type": "string"
+     },
+     "blockIndex": {
+      "type": "number"
+     },
+     "created": {
+      "type": "string"
+     },
+     "modified": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "status",
+     "txid",
+     "currency",
+     "to",
+     "from",
+     "fee",
+     "nonce",
+     "timeRecieved",
+     "blockIndex",
+     "created",
+     "modified"
+    ]
+   }
+}

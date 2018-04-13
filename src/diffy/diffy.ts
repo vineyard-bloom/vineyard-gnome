@@ -1,4 +1,5 @@
 import { blockchain } from 'vineyard-blockchain';
+import { BigNumber } from 'bignumber.js';
 import { AddressHistory, EthereumTransaction, TokenTransferRecord, Address, AddressResponse } from "../types"
 import { log } from 'util';
 import { _ } from 'lodash';
@@ -21,6 +22,18 @@ const assert = require('assert');
  */
 
 export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, originalObject2 = obj2 , rootname = 'objectRoot' , onlyFirst = [], onlySecond = [], differences = [], same = []): AddressResponse {
+  // passible HACK. had to move in here to get village running
+  Object.prototype.paths = function (root = [], result = {}) {
+    var ok = Object.keys(this);
+    return ok.reduce((res, key) => {
+      var path = root.concat(key);
+      typeof this[key] === "object" &&
+        this[key] !== null ? this[key].paths(path, res)
+        : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
+          : res[this[key]] = [path];
+      return res;
+    }, result);
+  };
 
   for (var key in obj1) {
     if (typeof obj1[key] === 'object') {
@@ -37,15 +50,25 @@ export function checkValues(obj1: object, obj2: object, originalObject1 = obj1, 
       }
 
       if (obj1 && obj2 && obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
-        const val2 = obj2[key];
+        let val2 = obj2[key];
+        if (typeof val2 === 'object') {
+          if(typeof val2.getDate === 'function') {
+            val2 = val2.toString()
+            obj2[key] = val2;
+          }
+          else  {
+            val2 = val2.toNumber();
+            obj2[key] = val2;
+          }
+          console.log('maybve');
+        }
         const path2 = originalObject2.paths()[val2];
-
-        if (val1 !== val2) {
+        if (val1.toString() !== val2.toString()) {
           // different values
           bothValues(val1, val2, path1, path2, rootname, differences);
         }
 
-        if (val1 === val2) {
+        if (val1.toString() == val2.toString() && path1 && path2) {
           // same values
           bothValues(val1, val2, path1, path2, rootname, same);
         }
@@ -86,22 +109,11 @@ export async function onlyValues(value: any, path: any[], rootname: string, arr:
 }
 
 export function bothValues(val1: any, val2: any, path1: string[], path2: string[], rootname: string, arr: any[]) {
+  if (typeof value === 'function') return;
   path1[0].unshift(rootname)
   path2[0].unshift(rootname)
   arr.push({ first: { path: path1, value: val1 }, second: { path: path2, value: val2 } })
 }
-
-Object.prototype.paths = function (root = [], result = {}) {
-  var ok = Object.keys(this);
-  return ok.reduce((res, key) => {
-    var path = root.concat(key);
-    typeof this[key] === "object" &&
-      this[key] !== null ? this[key].paths(path, res)
-      : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
-        : res[this[key]] = [path];
-    return res;
-  }, result);
-};
 
 export function unique(arr: any[], isMultiple = false): any[] {
   var uniques = _.map(_.groupBy(arr, function (item) {
