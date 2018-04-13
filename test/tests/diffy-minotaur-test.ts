@@ -1,5 +1,5 @@
 require('source-map-support').install()
-import { checkValues, checkValues2 } from "../../src/diffy"
+import { checkValues, checkValues2, validateAndNormalize } from "../../src/diffy"
 const assert = require('assert');
 import { startEthereumMonitor, createEthereumVillage, EthereumVillage } from "vineyard-minotaur/lab/ethereum-explorer-service"
 import { EthereumModel } from "vineyard-minotaur/src"
@@ -10,6 +10,7 @@ let transactionList = [];
 
 const second = 1000
 const minute = 60 * second
+const addressToTest = '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280'
 
 describe('ethh-scan', function () {
  this.timeout(10 * minute)
@@ -33,27 +34,24 @@ describe('ethh-scan', function () {
   })
 
   const addressToCheck = await village.model.Address.first({
-   address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280'
+   address: addressToTest
   })
 
   const transactionList = await village.model.Transaction.filter({
    to: addressToCheck.id
   })
+
   const minotaurObject = {
-   address:'0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
+   address:addressToTest,
    transactionList: transactionList.splice(0, 10),
   }
   const testObject = {
-   address:'0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
+   address:addressToTest,
    transactionList: testData.transactions
   }
-  const obj1String =  JSON.stringify(testObject)
-  const normalizedObj1 = JSON.parse(obj1String)
 
-  const obj2String = JSON.stringify(minotaurObject)
-  const normalizedObj2 = JSON.parse(obj2String)
-
-  const addressInfo = await checkValues(normalizedObj1, normalizedObj1);
+  const objs = await validateAndNormalize(testObject, minotaurObject)
+  const addressInfo = await checkValues(objs.normalizedObj1, objs.normalizedObj2);
   console.log('got address info');
 
  })
@@ -66,7 +64,7 @@ describe('ethh-scan', function () {
   })
 
   const addressToCheck = await village.model.Address.first({
-   address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280'
+   address: addressToTest
   })
 
   const transactionList = await village.model.Transaction.filter({
@@ -74,26 +72,21 @@ describe('ethh-scan', function () {
   })
 
   const minotaurObject = {
-   address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
+   address: addressToTest,
    blah: 'this value is only on this object',
    diff: 'val1',
    transactionList: transactionList.splice(0, 2),
   }
 
   const testObject = {
-   address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
+   address: addressToTest,
    bleh: 'this value only shows up o thihis object',
    diff: 'val1',
    transactionList: testData.transactions.splice(0, 2),
   }
-  const obj1String = JSON.stringify(testObject)
-  const normalizedObj1 = JSON.parse(obj1String)
 
-  const obj2String = JSON.stringify(minotaurObject)
-  const normalizedObj2 = JSON.parse(obj2String)
-
-  const addressInfo = await checkValues(normalizedObj1, normalizedObj2);
-
+  const objs = await validateAndNormalize(testObject, minotaurObject)
+  const addressInfo = await checkValues(objs.normalizedObj1, objs.normalizedObj2);
   console.log('got address info');
  })
 
