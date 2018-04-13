@@ -35,6 +35,18 @@ export async function checkValues2(obj1: object, obj2: object, originalObject1 =
 };
 
 export function getOnlyFirstValues(obj1: object, obj2: object, originalObject1: object, rootname: string, onlyFirstValues = []) {
+  Object.prototype.paths = function (root = [], result = {}) {
+    var ok = Object.keys(this);
+    return ok.reduce((res, key) => {
+      var path = root.concat(key);
+      typeof this[key] === "object" &&
+        this[key] !== null ? this[key].paths(path, res)
+        : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
+          : res[this[key]] = [path];
+      return res;
+    }, result);
+  };
+  
   for (var key in obj1) {
     const value = obj1[key];
     const path = originalObject1.paths()[value];
@@ -57,6 +69,18 @@ export function getOnlyFirstValues(obj1: object, obj2: object, originalObject1: 
 }
 
 export function getOnlySecondValues(obj1: object, obj2: object, originalObject2: object, rootname: string, onlySecondValues = []) {
+  Object.prototype.paths = function (root = [], result = {}) {
+    var ok = Object.keys(this);
+    return ok.reduce((res, key) => {
+      var path = root.concat(key);
+      typeof this[key] === "object" &&
+        this[key] !== null ? this[key].paths(path, res)
+        : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
+          : res[this[key]] = [path];
+      return res;
+    }, result);
+  };
+
   for (var key in obj2) {
     const value = obj2[key];
     const path = originalObject2.paths()[value];
@@ -78,6 +102,18 @@ export function getOnlySecondValues(obj1: object, obj2: object, originalObject2:
 }
 
 export function getDifferentValues(obj1: object, obj2: object, originalObject1: object, originalObject2: object, rootname: string, onlyDifferentValues = []) {
+  Object.prototype.paths = function (root = [], result = {}) {
+    var ok = Object.keys(this);
+    return ok.reduce((res, key) => {
+      var path = root.concat(key);
+      typeof this[key] === "object" &&
+        this[key] !== null ? this[key].paths(path, res)
+        : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
+          : res[this[key]] = [path];
+      return res;
+    }, result);
+  };
+
   for (var key in obj1) {
     
     if (typeof obj1[key] === 'object') {
@@ -101,7 +137,18 @@ export function getDifferentValues(obj1: object, obj2: object, originalObject1: 
 }
 
 export function getSameValues(obj1: object, obj2: object, originalObject2: object, originalObject1: object, rootname: string, onlySameValues = []) {
-  
+  Object.prototype.paths = function (root = [], result = {}) {
+    var ok = Object.keys(this);
+    return ok.reduce((res, key) => {
+      var path = root.concat(key);
+      typeof this[key] === "object" &&
+        this[key] !== null ? this[key].paths(path, res)
+        : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
+          : res[this[key]] = [path];
+      return res;
+    }, result);
+  };
+
   for (var key in obj1) {
 
     if (typeof obj1[key] === 'object') {
@@ -124,14 +171,14 @@ export function getSameValues(obj1: object, obj2: object, originalObject2: objec
   return onlySameValues;
 } 
 
-Object.prototype.paths = function (root = [], result = {}) {
- var ok = Object.keys(this);
- return ok.reduce((res, key) => {
-  var path = root.concat(key);
-  typeof this[key] === "object" &&
-   this[key] !== null ? this[key].paths(path, res)
-   : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
-    : res[this[key]] = [path];
-  return res;
- }, result);
-};
+// Object.prototype.paths = function (root = [], result = {}) {
+//  var ok = Object.keys(this);
+//  return ok.reduce((res, key) => {
+//   var path = root.concat(key);
+//   typeof this[key] === "object" &&
+//    this[key] !== null ? this[key].paths(path, res)
+//    : res[this[key]] == 0 || res[this[key]] ? res[this[key]].push(path)
+//     : res[this[key]] = [path];
+//   return res;
+//  }, result);
+// };

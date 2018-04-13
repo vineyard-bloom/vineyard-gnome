@@ -24,7 +24,7 @@ describe('ethh-scan', function () {
   await model.Currency.create({ name: 'Bitcoin' })
  })
  
- xit('from 4mil passes check', async function () {
+ it('from 4mil passes check', async function () {
   await model.LastBlock.create({ currency: 2, blockIndex: 4000000 })
   console.log('Initialized village')
   const monitorData  = await startEthereumMonitor(village, {
@@ -41,11 +41,11 @@ describe('ethh-scan', function () {
   })
   const minotaurObject = {
    address:'0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
-   transactionList: transactionList.splice(0, 1),
+   transactionList: transactionList.splice(0, 10),
   }
   const testObject = {
    address:'0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
-   transactionList: testData.transactions.splice(0, 1),
+   transactionList: testData.transactions
   }
   const obj1String =  JSON.stringify(testObject)
   const normalizedObj1 = JSON.parse(obj1String)
@@ -58,7 +58,7 @@ describe('ethh-scan', function () {
 
  })
  
- it('from 4mil fails check', async function () {
+ xit('from 4mil fails check', async function () {
   await model.LastBlock.create({ currency: 2, blockIndex: 4000000 })
   const monitorData = await startEthereumMonitor(village, {
    queue: { maxSize: 5, minSize: 1 },
@@ -77,14 +77,14 @@ describe('ethh-scan', function () {
    address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
    blah: 'this value is only on this object',
    diff: 'val1',
-   transactionList: transactionList.splice(0, 1),
+   transactionList: transactionList.splice(0, 2),
   }
 
   const testObject = {
    address: '0xB97048628DB6B661D4C2aA833e95Dbe1A905B280',
    bleh: 'this value only shows up o thihis object',
    diff: 'val1',
-   transactionList: testData.transactions.splice(0, 1),
+   transactionList: testData.transactions.splice(0, 2),
   }
   const obj1String = JSON.stringify(testObject)
   const normalizedObj1 = JSON.parse(obj1String)

@@ -4,5 +4,5 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./diffy"));
-// export * from './diffy.2' 
+__export(require("./diffy.2"));
 //# sourceMappingURL=index.js.map
